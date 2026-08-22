@@ -13,17 +13,21 @@ import {
 
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
+import { useAuth } from "../context/AuthContext";
 
 function Profile() {
+  const { currentUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [employee, setEmployee] = useState({
     name: "Employee Name",
-    email: "employee@dayflow.com",
+    email: currentUser?.email || "employee@dayflow.com",
     phone: "+91 9876543210",
     address: "Coimbatore, Tamil Nadu",
 
-    employeeId: "EMP001",
+    employeeId: "",
     department: "Engineering",
     designation: "Software Developer",
     joiningDate: "01 Jan 2026",
@@ -37,23 +41,56 @@ function Profile() {
 
   useEffect(() => {
     const fetchEmployee = async () => {
-      try {
-        const docRef = doc(db, "employees", "demoEmployee");
-        const docSnap = await getDoc(docRef);
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
 
-        if (docSnap.exists()) {
-          setEmployee((prev) => ({
-            ...prev,
-            ...docSnap.data(),
-          }));
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          setError("Your account information was not found.");
+          setLoading(false);
+          return;
         }
+
+        const userData = userSnap.data();
+        const employeeId = userData.employeeId;
+
+        if (!employeeId) {
+          setError("Employee ID is missing from your account.");
+          setLoading(false);
+          return;
+        }
+
+        const employeeRef = doc(db, "employees", employeeId);
+        const employeeSnap = await getDoc(employeeRef);
+
+        if (!employeeSnap.exists()) {
+          setError("Your employee profile has not been created in the database yet.");
+          setLoading(false);
+          return;
+        }
+
+        const employeeData = employeeSnap.data();
+        setEmployee((prev) => ({
+          ...prev,
+          ...employeeData,
+          email: employeeData.email || currentUser.email || prev.email,
+          employeeId: employeeId,
+        }));
       } catch (error) {
         console.error("Error loading profile:", error);
+        setError("Unable to load employee profile.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEmployee();
-  }, []);
+  }, [currentUser]);
 
   const handleChange = (e) => {
     setEmployee({
@@ -63,11 +100,20 @@ function Profile() {
   };
 
   const handleSave = async () => {
+    const employeeId = employee.employeeId || currentUser?.uid;
+
+    if (!employeeId) {
+      alert("No employee ID found for this profile.");
+      return;
+    }
+
     try {
-      await setDoc(
-        doc(db, "employees", "demoEmployee"),
-        employee
-      );
+      await setDoc(doc(db, "employees", employeeId), {
+        ...employee,
+        employeeId,
+        uid: currentUser.uid,
+        email: employee.email || currentUser.email,
+      });
 
       alert("Profile updated successfully!");
       setIsEditing(false);
@@ -81,6 +127,19 @@ function Profile() {
     Number(employee.basicSalary || 0) +
     Number(employee.allowances || 0) -
     Number(employee.deductions || 0);
+
+  if (loading) {
+    return <div className="profile-container"><h2>Loading profile...</h2></div>;
+  }
+
+  if (error) {
+    return (
+      <div className="profile-container">
+        <h2>My Profile</h2>
+        <p className="error-message">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
