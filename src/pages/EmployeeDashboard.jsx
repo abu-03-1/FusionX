@@ -7,7 +7,10 @@ import {
   Wallet,
 } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   doc,
@@ -21,7 +24,21 @@ import { useAuth } from "../context/AuthContext";
 
 function EmployeeDashboard() {
 
-  const { currentUser } = useAuth();
+  // ==========================================
+  // AUTHENTICATION
+  // ==========================================
+
+  const {
+    currentUser,
+    logout,
+  } = useAuth();
+
+  const navigate = useNavigate();
+
+
+  // ==========================================
+  // STATE
+  // ==========================================
 
   const [employee, setEmployee] = useState(null);
 
@@ -30,19 +47,51 @@ function EmployeeDashboard() {
   const [error, setError] = useState("");
 
 
+  // ==========================================
+  // LOGOUT
+  // ==========================================
+
+  const handleLogout = async () => {
+
+    try {
+
+      await logout();
+
+      navigate("/login", {
+        replace: true,
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Logout failed:",
+        error
+      );
+
+    }
+  };
+
+
+  // ==========================================
+  // FETCH EMPLOYEE DATA
+  // ==========================================
+
   useEffect(() => {
 
     const fetchEmployee = async () => {
 
       if (!currentUser) {
+
         setLoading(false);
+
         return;
       }
 
       try {
 
         // ==========================================
-        // STEP 1: Get logged-in user's data
+        // STEP 1:
+        // Get logged-in user's document
         // ==========================================
 
         const userRef = doc(
@@ -51,7 +100,9 @@ function EmployeeDashboard() {
           currentUser.uid
         );
 
-        const userSnap = await getDoc(userRef);
+        const userSnap = await getDoc(
+          userRef
+        );
 
 
         if (!userSnap.exists()) {
@@ -68,8 +119,13 @@ function EmployeeDashboard() {
 
         const userData = userSnap.data();
 
-        const employeeId = userData.employeeId;
+        const employeeId =
+          userData.employeeId;
 
+
+        // ==========================================
+        // Check Employee ID
+        // ==========================================
 
         if (!employeeId) {
 
@@ -84,7 +140,8 @@ function EmployeeDashboard() {
 
 
         // ==========================================
-        // STEP 2: Get employee profile
+        // STEP 2:
+        // Get employee profile
         // ==========================================
 
         const employeeRef = doc(
@@ -110,10 +167,13 @@ function EmployeeDashboard() {
 
 
         // ==========================================
-        // STEP 3: Store employee data
+        // STEP 3:
+        // Store employee data
         // ==========================================
 
-        setEmployee(employeeSnap.data());
+        setEmployee(
+          employeeSnap.data()
+        );
 
       } catch (error) {
 
@@ -147,7 +207,11 @@ function EmployeeDashboard() {
 
     return (
       <div className="dashboard-container">
-        <h2>Loading employee dashboard...</h2>
+
+        <h2>
+          Loading employee dashboard...
+        </h2>
+
       </div>
     );
 
@@ -163,11 +227,21 @@ function EmployeeDashboard() {
     return (
       <div className="dashboard-container">
 
-        <h2>Employee Dashboard</h2>
+        <h2>
+          Employee Dashboard
+        </h2>
 
         <p className="error-message">
           {error}
         </p>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="logout-button"
+        >
+          Logout
+        </button>
 
       </div>
     );
@@ -176,14 +250,16 @@ function EmployeeDashboard() {
 
 
   // ==========================================
-  // DASHBOARD
+  // EMPLOYEE DASHBOARD
   // ==========================================
 
   return (
 
     <div className="dashboard-container">
 
-      {/* Header */}
+      {/* =====================================
+          DASHBOARD HEADER
+      ====================================== */}
 
       <div className="dashboard-header">
 
@@ -195,19 +271,38 @@ function EmployeeDashboard() {
           </h1>
 
           <p>
-            {employee?.designation || "Employee"}
+            {employee?.designation ||
+              "Employee"}
+
             {" • "}
-            {employee?.department || "Department"}
+
+            {employee?.department ||
+              "Department"}
           </p>
 
         </div>
 
+
+        {/* Logout Button */}
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="logout-button"
+        >
+          Logout
+        </button>
+
       </div>
 
 
-      {/* Quick Actions */}
+      {/* =====================================
+          QUICK ACTIONS
+      ====================================== */}
 
       <div className="quick-actions">
+
+        {/* Profile */}
 
         <Link
           to="/profile"
@@ -221,11 +316,14 @@ function EmployeeDashboard() {
           </h2>
 
           <p>
-            View and update your personal details
+            View and update your personal
+            details
           </p>
 
         </Link>
 
+
+        {/* Attendance */}
 
         <Link
           to="/attendance"
@@ -239,11 +337,14 @@ function EmployeeDashboard() {
           </h2>
 
           <p>
-            Check your daily and monthly attendance
+            Check your daily and monthly
+            attendance
           </p>
 
         </Link>
 
+
+        {/* Leave */}
 
         <Link
           to="/leave"
@@ -257,11 +358,14 @@ function EmployeeDashboard() {
           </h2>
 
           <p>
-            Apply and track your leave requests
+            Apply and track your leave
+            requests
           </p>
 
         </Link>
 
+
+        {/* Payroll */}
 
         <Link
           to="/payroll"
@@ -275,7 +379,8 @@ function EmployeeDashboard() {
           </h2>
 
           <p>
-            View your salary and payroll details
+            View your salary and payroll
+            details
           </p>
 
         </Link>
@@ -283,7 +388,9 @@ function EmployeeDashboard() {
       </div>
 
 
-      {/* Employee Overview */}
+      {/* =====================================
+          EMPLOYEE OVERVIEW
+      ====================================== */}
 
       <div className="recent-activity">
 
@@ -294,10 +401,13 @@ function EmployeeDashboard() {
         <div className="activity-item">
 
           <p>
+
             Welcome to{" "}
+
             <strong>
               Dayflow HRMS
             </strong>
+
           </p>
 
           <span>
