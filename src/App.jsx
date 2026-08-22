@@ -8,6 +8,9 @@ import {
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+import HRAttendance from "./pages/HRAttendance";
+
+
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -38,6 +41,9 @@ function App() {
           path="/login"
           element={<Login />}
         />
+
+
+        <Route path="/hr-attendance" element={<HRAttendance />} />
 
         {/* Employee Registration Only */}
         <Route
