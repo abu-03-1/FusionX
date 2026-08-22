@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Mail,
   Phone,
@@ -7,8 +7,9 @@ import {
   Briefcase,
   Calendar,
   CreditCard,
-  Wallet,
+  Camera,
   Pencil,
+  X,
 } from "lucide-react";
 
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -17,15 +18,23 @@ import { useAuth } from "../context/AuthContext";
 
 function Profile() {
   const { currentUser } = useAuth();
+  const fileInputRef = useRef(null);
+  const cropStageRef = useRef(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [cropImage, setCropImage] = useState("");
+  const [cropBox, setCropBox] = useState({ left: 20, top: 20, size: 60 });
+  const [dragging, setDragging] = useState(false);
 
   const [employee, setEmployee] = useState({
     name: "Employee Name",
     email: currentUser?.email || "employee@dayflow.com",
     phone: "+91 9876543210",
     address: "Coimbatore, Tamil Nadu",
+    dob: "1998-06-15",
 
     employeeId: "",
     department: "Engineering",
@@ -92,11 +101,109 @@ function Profile() {
     fetchEmployee();
   }, [currentUser]);
 
+  const formatDate = (value) => {
+    if (!value) return "Not added";
+
+    const date = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return value;
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   const handleChange = (e) => {
     setEmployee({
       ...employee,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const openImagePicker = () => fileInputRef.current?.click();
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropImage(reader.result);
+      setCropBox({ left: 20, top: 20, size: 60 });
+      setCropModalOpen(true);
+    };
+    reader.readAsDataURL(file);
+
+    e.target.value = "";
+  };
+
+  const handleCropPointerDown = (event) => {
+    event.preventDefault();
+    setDragging({
+      startX: event.clientX,
+      startY: event.clientY,
+      originLeft: cropBox.left,
+      originTop: cropBox.top,
+    });
+  };
+
+  const handleCropPointerMove = (event) => {
+    if (!dragging || !cropStageRef.current) return;
+
+    const stageRect = cropStageRef.current.getBoundingClientRect();
+    const deltaX = ((event.clientX - dragging.startX) / stageRect.width) * 100;
+    const deltaY = ((event.clientY - dragging.startY) / stageRect.height) * 100;
+
+    setCropBox((prev) => ({
+      ...prev,
+      left: Math.min(Math.max(dragging.originLeft + deltaX, 0), 100 - prev.size),
+      top: Math.min(Math.max(dragging.originTop + deltaY, 0), 100 - prev.size),
+    }));
+  };
+
+  const handleCropPointerUp = () => setDragging(false);
+
+  const applyCrop = () => {
+    const image = new Image();
+    image.src = cropImage;
+
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const size = 600;
+      canvas.width = size;
+      canvas.height = size;
+
+      const ctx = canvas.getContext("2d");
+
+      const left = (cropBox.left / 100) * image.naturalWidth;
+      const top = (cropBox.top / 100) * image.naturalHeight;
+      const cropSize = (cropBox.size / 100) * Math.min(image.naturalWidth, image.naturalHeight);
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(
+        image,
+        left,
+        top,
+        cropSize,
+        cropSize,
+        0,
+        0,
+        size,
+        size
+      );
+
+      setEmployee((prev) => ({
+        ...prev,
+        profileImage: canvas.toDataURL("image/jpeg", 0.92),
+      }));
+
+      setCropModalOpen(false);
+      setCropImage("");
+      setDragging(false);
+    };
   };
 
   const handleSave = async () => {
@@ -123,11 +230,6 @@ function Profile() {
     }
   };
 
-  const netSalary =
-    Number(employee.basicSalary || 0) +
-    Number(employee.allowances || 0) -
-    Number(employee.deductions || 0);
-
   if (loading) {
     return <div className="profile-container"><h2>Loading profile...</h2></div>;
   }
@@ -146,22 +248,51 @@ function Profile() {
 
       {/* Profile Header */}
       <div className="profile-header">
-        <div className="profile-avatar">
-          {employee.profileImage ? (
-            <img
-              src={employee.profileImage}
-              alt="Profile"
-              className="profile-image"
-            />
-          ) : (
-            employee.name?.charAt(0) || "E"
+        <div className="profile-avatar-wrapper">
+          <div className="profile-avatar">
+            {employee.profileImage ? (
+              <img
+                src={employee.profileImage}
+                alt="Profile"
+                className="profile-image"
+              />
+            ) : (
+              employee.name
+                ? employee.name
+                    .split(" ")
+                    .map((part) => part[0])
+                    .slice(0, 2)
+                    .join("")
+                    .toUpperCase()
+                : "E"
+            )}
+          </div>
+
+          {isEditing && (
+            <>
+              <button
+                type="button"
+                className="camera-button"
+                onClick={openImagePicker}
+                aria-label="Upload profile image"
+              >
+                <Camera size={16} />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleImageUpload}
+              />
+            </>
           )}
         </div>
 
-        <div>
-          <h1>{employee.name}</h1>
-          <p>{employee.designation}</p>
-          <span>{employee.department}</span>
+        <div className="profile-info">
+          <h1 className="profile-name">{employee.name || "Employee"}</h1>
+          <p>{employee.designation || "Employee"}</p>
+          <span>{employee.department || "Department"}</span>
         </div>
 
         <button
@@ -205,6 +336,24 @@ function Profile() {
           </div>
 
           <div className="profile-field">
+            <Calendar size={20} />
+            <div>
+              <label>Date of Birth</label>
+
+              {isEditing ? (
+                <input
+                  type="date"
+                  name="dob"
+                  value={employee.dob || ""}
+                  onChange={handleChange}
+                />
+              ) : (
+                <p>{formatDate(employee.dob)}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="profile-field">
             <MapPin size={20} />
             <div>
               <label>Address</label>
@@ -225,14 +374,8 @@ function Profile() {
             <div className="profile-field">
               <CreditCard size={20} />
               <div>
-                <label>Profile Image URL</label>
-
-                <input
-                  name="profileImage"
-                  value={employee.profileImage}
-                  onChange={handleChange}
-                  placeholder="Paste image URL"
-                />
+                <label>Profile Image</label>
+                <p className="profile-upload-note">Use the camera icon above to choose and crop a profile picture.</p>
               </div>
             </div>
           )}
@@ -276,35 +419,65 @@ function Profile() {
         </div>
       </div>
 
-      {/* Salary Structure */}
-      <div className="salary-card">
-        <div className="salary-title">
-          <Wallet size={24} />
-          <h2>Salary Structure</h2>
+      {cropModalOpen && (
+        <div className="crop-modal-backdrop">
+          <div className="crop-modal">
+            <div className="crop-modal-header">
+              <h3>Crop profile photo</h3>
+              <button type="button" className="close-crop-btn" onClick={() => setCropModalOpen(false)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div
+              ref={cropStageRef}
+              className="crop-stage"
+              onPointerMove={handleCropPointerMove}
+              onPointerUp={handleCropPointerUp}
+              onPointerLeave={handleCropPointerUp}
+            >
+              <img src={cropImage} alt="Crop preview" className="crop-image" />
+              <div
+                className="crop-box"
+                onPointerDown={handleCropPointerDown}
+                style={{
+                  left: `${cropBox.left}%`,
+                  top: `${cropBox.top}%`,
+                  width: `${cropBox.size}%`,
+                  height: `${cropBox.size}%`,
+                }}
+              />
+            </div>
+
+            <div className="crop-controls">
+              <label>Crop size</label>
+              <input
+                type="range"
+                min="30"
+                max="80"
+                value={cropBox.size}
+                onChange={(e) =>
+                  setCropBox((prev) => ({
+                    ...prev,
+                    size: Number(e.target.value),
+                    left: Math.min(prev.left, 100 - Number(e.target.value)),
+                    top: Math.min(prev.top, 100 - Number(e.target.value)),
+                  }))
+                }
+              />
+            </div>
+
+            <div className="crop-actions">
+              <button type="button" className="cancel-btn" onClick={() => setCropModalOpen(false)}>
+                Cancel
+              </button>
+              <button type="button" className="save-profile-btn" onClick={applyCrop}>
+                Apply Crop
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className="salary-grid">
-          <div className="salary-item">
-            <span>Basic Salary</span>
-            <strong>₹{employee.basicSalary}</strong>
-          </div>
-
-          <div className="salary-item">
-            <span>Allowances</span>
-            <strong>₹{employee.allowances}</strong>
-          </div>
-
-          <div className="salary-item">
-            <span>Deductions</span>
-            <strong>₹{employee.deductions}</strong>
-          </div>
-
-          <div className="salary-item net-salary">
-            <span>Net Salary</span>
-            <strong>₹{netSalary}</strong>
-          </div>
-        </div>
-      </div>
+      )}
 
       {isEditing && (
         <button className="save-profile-btn" onClick={handleSave}>

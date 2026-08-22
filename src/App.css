@@ -277,16 +277,74 @@
   margin-bottom: 25px;
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.2;
+  color: #111827;
+}
+
+.profile-info p,
+.profile-info span {
+  margin: 0;
+  color: #64748b;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: #2563eb;
   color: white;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-button {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #111827;
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.28);
+}
+
+.profile-upload-note {
+  color: #64748b;
+  font-size: 13px;
 }
 
 .profile-header button {
@@ -346,8 +404,6 @@
   color: white;
   cursor: pointer;
 }
-<<<<<<< HEAD
-
 
 /* =========================
    ATTENDANCE MODULE
@@ -643,7 +699,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-=======
+
 @media (max-width: 900px) {
   .quick-actions {
     grid-template-columns: repeat(2, 1fr);
@@ -697,7 +753,110 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.crop-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.56);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.crop-modal {
+  width: min(520px, 100%);
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.2);
+  padding: 22px;
+}
+
+.crop-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.crop-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.close-crop-btn {
+  border: none;
+  background: #f3f4f6;
+  color: #111827;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.crop-stage {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  touch-action: none;
+}
+
+.crop-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.crop-box {
+  position: absolute;
+  border: 2px solid #2563eb;
+  background: rgba(37, 99, 235, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
+  cursor: move;
+}
+
+.crop-controls {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crop-controls label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.crop-controls input[type="range"] {
+  width: 100%;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 8px;
+  color: #374151;
+  cursor: pointer;
 }
 
 
@@ -864,4 +1023,4 @@
     margin-left: 0;
   }
 }
->>>>>>> c9763bc7acbc69151f398949e495a0b897e9ba2f
+
