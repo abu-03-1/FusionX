@@ -228,6 +228,37 @@ td { color: #4d586c; }
 .hr-header { background: var(--color-surface); border-color: var(--color-border); }
 .hr-header h1, .dashboard-card h3, .card-header h3, .employee-modal h2, .employee-modal h3, .employee-attendance-profile h2 { font-family: var(--font-display); color: var(--color-ink); }
 .hr-header p, .card-header p, .employee-attendance-profile p { color: var(--color-ink-soft); }
+.hr-sidebar .hr-brand h2, .hr-sidebar .hr-brand span,
+.hr-sidebar .admin-mini-profile strong, .hr-sidebar .admin-mini-profile span,
+.hr-sidebar .nav-label, .hr-sidebar .nav-item, .hr-sidebar .logout-button { color: #FFF8F0; }
+.hr-sidebar .hr-brand span, .hr-sidebar .admin-mini-profile span,
+.hr-sidebar .nav-label { color: #E5CDB8; }
+.hr-brand span, .admin-mini-profile span, .header-admin span, .stat-info small,
+.nav-label, .hr-header p, .card-header p, .employee-cell span, .table-subtext,
+.reviewed-text, .hr-loading p, .hr-error p { color: var(--color-ink-soft); }
+.nav-item { color: #F2E4D7; }
+.sidebar-bottom { border-color: var(--color-border-strong); }
+.admin-avatar { background: var(--color-accent-tint); color: var(--color-accent-dark); }
+.hr-header, .stat-card, .dashboard-card, .attendance-history,
+.date-picker, .filter-box, .search-box, .employee-modal { background: var(--color-surface); }
+.hr-header, .stat-card, .dashboard-card, .attendance-history,
+.date-picker, .filter-box, .search-box, th, td, .modal-header { border-color: var(--color-border); }
+.stat-info span, .date-picker, .filter-box, .notification-button, .search-box,
+.payroll-form label, td { color: var(--color-ink-soft); }
+.date-picker input, .filter-box select, .search-box input, .employee-cell strong,
+.editable-details > label input, .editable-details > label select,
+.payroll-form input, .payroll-form select { color: var(--color-ink); }
+.employee-avatar, .large-avatar, .icon-action { background: var(--color-accent-tint); color: var(--color-accent-dark); }
+.action-card { border-color: var(--color-border); background: var(--color-surface-alt); color: var(--color-ink); }
+.action-card:hover, .editable-details > label input:focus, .editable-details > label select:focus,
+.payroll-form input:focus, .payroll-form select:focus { border-color: var(--color-accent); color: var(--color-accent-dark); }
+.editable-details > label, .employee-details div { background: var(--color-surface-alt); }
+.editable-details > label input, .editable-details > label select,
+.payroll-form input, .payroll-form select { border-color: var(--color-border-strong); background: var(--color-surface); }
+.department-save, .payroll-save, .hr-error button { background: var(--color-accent); }
+.payroll-net { background: var(--color-green-tint); color: var(--color-green); }
+.empty-state, .hr-loading, .hr-error { background: var(--color-bg); }
+.loading-icon { color: var(--color-accent); }
 .dashboard-content, .section-content { background: var(--color-bg); }
 .stat-card, .dashboard-card, .employee-modal, .attendance-history { border-color: var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .stat-card:hover, .dashboard-card:hover { box-shadow: var(--shadow-md); }

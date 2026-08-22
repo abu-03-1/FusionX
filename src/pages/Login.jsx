@@ -90,12 +90,13 @@ function Login() {
     <div className="login">
       <section className="login__panel">
         <div className="login__brand">
-          <span className="employee-brand__mark">D</span>
+          <span className="employee-brand__mark">R</span>
           <span><strong>RotaX</strong><small>HR MANAGEMENT</small></span>
         </div>
+        <div className="login__building" aria-hidden="true"><img src="/sketch-skyscraper-office-building-urban-tower_184560-415.png" alt="" /></div>
         <div className="login__quote">
-          <h2>One clear view of the workday.</h2>
-          <p>Stay aligned with attendance, leave, and payroll in one calm workspace.</p>
+          <h2>Bring every workday into focus.</h2>
+          <p>Attendance, leave, and payroll, organized in one clear workspace.</p>
           <div className="login__arc-wrap"><div className="login-arc-line" /><span className="login-arc-dot" /></div>
         </div>
         <p className="login__quote-note">Human Resource Management System</p>
