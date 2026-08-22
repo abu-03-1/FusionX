@@ -87,102 +87,37 @@ function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-
-        <h1>Dayflow</h1>
-
-        <p>Human Resource Management System</p>
-
-        <h2>Login</h2>
-
-        {/* Login Type */}
-        <div className="login-type">
-
-          <button
-            type="button"
-            className={
-              loginType === "employee" ? "active" : ""
-            }
-            onClick={() =>
-              handleLoginTypeChange("employee")
-            }
-          >
-            Employee
-          </button>
-
-          <button
-            type="button"
-            className={
-              loginType === "admin" ? "active" : ""
-            }
-            onClick={() =>
-              handleLoginTypeChange("admin")
-            }
-          >
-            Admin / HR
-          </button>
-
+    <div className="login">
+      <section className="login__panel">
+        <div className="login__brand">
+          <span className="employee-brand__mark">D</span>
+          <span><strong>Dayflow</strong><small>HR MANAGEMENT</small></span>
         </div>
-
-        <form onSubmit={handleSubmit}>
-
-          {/* Email */}
-          <div>
-            <label>Email</label>
-
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
+        <div className="login__quote">
+          <h2>One clear view of the workday.</h2>
+          <p>Stay aligned with attendance, leave, and payroll in one calm workspace.</p>
+          <div className="login__arc-wrap"><div className="login-arc-line" /><span className="login-arc-dot" /></div>
+        </div>
+        <p className="login__quote-note">Human Resource Management System</p>
+      </section>
+      <section className="login__form-col">
+        <div className="login__form">
+          <span className="content__eyebrow">Welcome back</span>
+          <h1>Sign in to Dayflow</h1>
+          <p className="login__form-sub">Use your work account to continue.</p>
+          <div className="login-type" role="tablist" aria-label="Account type">
+            <button type="button" className={loginType === "employee" ? "active" : ""} onClick={() => handleLoginTypeChange("employee")}>Employee</button>
+            <button type="button" className={loginType === "admin" ? "active" : ""} onClick={() => handleLoginTypeChange("admin")}>Admin / HR</button>
           </div>
-
-          {/* Password */}
-          <div>
-            <label>Password</label>
-
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          {/* Error */}
-          {error && (
-            <p className="error-message">
-              {error}
-            </p>
-          )}
-
-          {/* Login Button */}
-          <button
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-
-        </form>
-
-        {/* Employee Sign Up Only */}
-        {loginType === "employee" && (
-          <p>
-            New employee?{" "}
-            <Link to="/register">
-              Create an account
-            </Link>
-          </p>
-        )}
-
-      </div>
+          <form onSubmit={handleSubmit}>
+            <div className="field"><label className="field__label" htmlFor="login-email">Email</label><input className="field__control" id="login-email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@company.com" required /></div>
+            <div className="field"><label className="field__label" htmlFor="login-password">Password</label><input className="field__control" id="login-password" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" required /></div>
+            {error && <p className="field__hint field__hint--error">{error}</p>}
+            <button className="btn btn--primary btn--full login-submit" type="submit" disabled={loading}>{loading ? "Signing in..." : "Sign In"}</button>
+          </form>
+          {loginType === "employee" && <p className="login__footer-note">New employee? <Link className="link" to="/register">Create an account</Link></p>}
+        </div>
+      </section>
     </div>
   );
 }

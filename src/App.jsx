@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import HRAttendance from "./pages/HRAttendance";
-import EmployeeDashboard from "./pages/EmployeeDashboard";
+import EmployeeDashboardView from "./pages/EmployeeDashboardView";
 import AdminDashboard from "./pages/AdminDashboard";
 
 import Profile from "./pages/Profile";
@@ -42,7 +42,7 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute allowedRoles={["employee"]}>
-              <EmployeeDashboard />
+              <EmployeeDashboardView />
             </ProtectedRoute>
           }
         />
@@ -50,7 +50,7 @@ function App() {
           path="/employee-dashboard"
           element={
             <ProtectedRoute allowedRoles={["employee"]}>
-              <EmployeeDashboard />
+              <EmployeeDashboardView />
             </ProtectedRoute>
           }
         />

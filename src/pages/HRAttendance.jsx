@@ -189,6 +189,15 @@ function HRAttendance() {
   return (
     <div className="hr-attendance-page">
 
+      <button
+        type="button"
+        className="page-back-button"
+        onClick={() => window.history.back()}
+      >
+        <ArrowLeft size={17} />
+        Back
+      </button>
+
       {/* Header */}
       <div className="hr-attendance-header">
         <div>

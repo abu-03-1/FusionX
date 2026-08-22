@@ -9,12 +9,14 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
+import "./Attendance.css";
 import {
   Clock3,
   LogIn,
   LogOut,
   CalendarDays,
   RefreshCw,
+  ArrowLeft,
 } from "lucide-react";
 
 function getToday() {
@@ -296,6 +298,14 @@ function Attendance() {
 
   return (
     <div className="attendance-page">
+      <button
+        type="button"
+        className="page-back-button"
+        onClick={() => window.history.back()}
+      >
+        <ArrowLeft size={17} />
+        Back
+      </button>
       <div className="attendance-header">
         <div>
           <p className="attendance-label">DAYFLOW HRMS</p>

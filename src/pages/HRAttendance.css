@@ -373,3 +373,25 @@
     align-items: flex-start;
   }
 }
+
+/* Dayflow design-system mapping for the standalone HR attendance view. */
+.hr-attendance-page { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); }
+.hr-attendance-header h1, .selected-employee-card h2, .hr-section-header h2 { font-family: var(--font-display); color: var(--color-ink); }
+.hr-label { color: var(--color-accent-dark); }
+.hr-attendance-header p, .selected-employee-card p, .hr-summary-card span, .hr-table td, .hr-section-header > span { color: var(--color-ink-soft); }
+.selected-employee-card, .hr-summary-card, .hr-table-card { border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.hr-refresh-button, .hr-back-button { border-color: var(--color-border-strong); background: var(--color-surface); color: var(--color-ink); }
+.hr-refresh-button:hover, .hr-back-button:hover { background: var(--color-surface-alt); }
+.hr-search, .hr-date-filter { border-color: var(--color-border-strong); background: var(--color-surface); }
+.hr-search input, .hr-date-filter input { color: var(--color-ink); }
+.hr-table th { background: var(--color-surface-alt); color: var(--color-ink-soft); }
+.hr-table th, .hr-table td { border-color: var(--color-border); }
+.employee-avatar { background: var(--color-accent-tint); color: var(--color-accent-dark); }
+.hr-summary-card.employees svg { color: var(--color-accent-dark); }
+.hr-summary-card.present svg, .hr-status.present, .mini-present { color: var(--color-green); }
+.hr-summary-card.absent svg, .hr-status.absent, .mini-absent { color: var(--color-red); }
+.hr-summary-card.incomplete svg, .hr-status.incomplete { color: var(--color-amber); }
+.hr-status.present { background: var(--color-green-tint); }
+.hr-status.absent { background: var(--color-red-tint); }
+.hr-status.incomplete { background: var(--color-amber-tint); }
+.view-button { background: var(--color-accent-tint); color: var(--color-accent-dark); }

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Wallet } from "lucide-react";
+import { ArrowLeft, Wallet } from "lucide-react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
+import "./Payroll.css";
 
 function Payroll() {
   const { currentUser } = useAuth();
@@ -68,12 +69,13 @@ function Payroll() {
     Number(employee.deductions || 0);
 
   if (loading) {
-    return <div className="profile-container"><h2>Loading payroll...</h2></div>;
+    return <div className="payroll-page"><h2>Loading payroll...</h2></div>;
   }
 
   if (error) {
     return (
-      <div className="profile-container">
+      <div className="payroll-page">
+        <button type="button" className="page-back-button" onClick={() => window.history.back()}><ArrowLeft size={17} />Back</button>
         <h2>Payroll</h2>
         <p className="error-message">{error}</p>
       </div>
@@ -81,7 +83,8 @@ function Payroll() {
   }
 
   return (
-    <div className="profile-container">
+    <div className="payroll-page">
+      <button type="button" className="page-back-button" onClick={() => window.history.back()}><ArrowLeft size={17} />Back</button>
       <div className="profile-header">
         <div className="profile-avatar">
           {employee.name?.charAt(0) || "E"}

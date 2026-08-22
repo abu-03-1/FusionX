@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Plus,
   Send,
+  ArrowLeft,
 } from "lucide-react";
 
 import {
@@ -22,6 +23,7 @@ import {
 
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
+import "./Leave.css";
 
 
 function Leave() {
@@ -575,6 +577,15 @@ function Leave() {
   return (
 
     <div className="leave-page">
+
+      <button
+        type="button"
+        className="page-back-button"
+        onClick={() => window.history.back()}
+      >
+        <ArrowLeft size={17} />
+        Back
+      </button>
 
       {/* ======================================
           HEADER

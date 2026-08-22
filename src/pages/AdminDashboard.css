@@ -219,3 +219,61 @@ td { color: #4d586c; }
   .employee-details { grid-template-columns: 1fr; }
   .payroll-form { grid-template-columns: 1fr; }
 }
+
+/* Dayflow design-system mapping for the HR workspace. */
+.hr-layout { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); }
+.hr-sidebar { background: var(--color-primary); }
+.brand-logo { background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark)); }
+.nav-item:hover, .nav-item.active { background: var(--color-primary-soft); }
+.hr-header { background: var(--color-surface); border-color: var(--color-border); }
+.hr-header h1, .dashboard-card h3, .card-header h3, .employee-modal h2, .employee-modal h3, .employee-attendance-profile h2 { font-family: var(--font-display); color: var(--color-ink); }
+.hr-header p, .card-header p, .employee-attendance-profile p { color: var(--color-ink-soft); }
+.dashboard-content, .section-content { background: var(--color-bg); }
+.stat-card, .dashboard-card, .employee-modal, .attendance-history { border-color: var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.stat-card:hover, .dashboard-card:hover { box-shadow: var(--shadow-md); }
+.stat-info span, td, .employee-details span { color: var(--color-ink-soft); }
+.stat-info small, th, .employee-cell span, .table-subtext { color: var(--color-ink-faint); }
+.stat-icon.blue { background: var(--color-blue-tint); color: var(--color-blue); }
+.stat-icon.green { background: var(--color-green-tint); color: var(--color-green); }
+.stat-icon.red { background: var(--color-red-tint); color: var(--color-red); }
+.stat-icon.orange { background: var(--color-amber-tint); color: var(--color-amber); }
+.search-box, .filter-box, .date-picker, .payroll-form input, .payroll-form select, .editable-details > label input, .editable-details > label select { border-color: var(--color-border-strong); background: var(--color-surface); color: var(--color-ink); }
+.view-button { background: var(--color-accent-tint); color: var(--color-accent-dark); }
+.view-button:hover { background: var(--color-accent-tint); filter: brightness(.96); }
+.table-wrapper th, .table-wrapper td { border-color: var(--color-border); }
+.employee-avatar, .large-avatar { background: var(--color-accent-tint); color: var(--color-accent-dark); }
+.status-badge.active, .status-badge.present, .status-badge.approved { background: var(--color-green-tint); color: var(--color-green); }
+.status-badge.absent, .status-badge.rejected { background: var(--color-red-tint); color: var(--color-red); }
+.status-badge.pending, .status-badge.on-leave { background: var(--color-amber-tint); color: var(--color-amber); }
+.action-card { border-color: var(--color-border); background: var(--color-surface-alt); color: var(--color-ink); }
+.action-card:hover { border-color: var(--color-accent); color: var(--color-accent-dark); }
+.payroll-net { background: var(--color-green-tint); color: var(--color-green); }
+.payroll-save, .department-save { background: var(--color-accent); }
+.payroll-save:hover, .department-save:hover { background: var(--color-accent-dark); }
+.modal-overlay { background: rgba(18, 25, 43, .5); }
+.employee-details div, .editable-details > label { background: var(--color-surface-alt); }
+
+/* Keep the admin overview balanced: attendance, actions, then full-width data. */
+.dashboard-grid { grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr); }
+.dashboard-grid > .full-card { grid-column: 1 / -1; }
+.quick-panel .quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .quick-panel .quick-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .quick-panel .quick-actions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hr-sidebar { animation: sidebar-enter 420ms var(--ease) both; }
+  .hr-header { animation: workspace-enter 360ms var(--ease) both; }
+  .hr-layout .stat-card { animation: workspace-enter 420ms var(--ease) both; }
+  .hr-layout .stat-card:nth-child(1) { animation-delay: 80ms; }
+  .hr-layout .stat-card:nth-child(2) { animation-delay: 130ms; }
+  .hr-layout .stat-card:nth-child(3) { animation-delay: 180ms; }
+  .hr-layout .stat-card:nth-child(4) { animation-delay: 230ms; }
+  .hr-layout .dashboard-card { animation: workspace-enter 460ms var(--ease) 280ms both; }
+}
