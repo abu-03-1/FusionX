@@ -336,8 +336,6 @@
   color: white;
   cursor: pointer;
 }
-<<<<<<< HEAD
-
 
 /* =========================
    ATTENDANCE MODULE
@@ -633,7 +631,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-=======
+
 @media (max-width: 900px) {
   .quick-actions {
     grid-template-columns: repeat(2, 1fr);
@@ -654,6 +652,7 @@
     padding: 20px;
   }
 }
+
 .edit-profile-btn,
 .save-profile-btn {
   display: flex;
@@ -750,4 +749,4 @@
     margin-left: 0;
   }
 }
->>>>>>> c9763bc7acbc69151f398949e495a0b897e9ba2f
+
