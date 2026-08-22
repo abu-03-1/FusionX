@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
+=======
+import { useState, useEffect } from "react";
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
 import {
   Mail,
   Phone,
@@ -12,11 +17,20 @@ import {
   X,
 } from "lucide-react";
 
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 
+import { useAuth } from "../context/AuthContext";
+
+
 function Profile() {
+<<<<<<< HEAD
   const { currentUser } = useAuth();
   const fileInputRef = useRef(null);
   const cropStageRef = useRef(null);
@@ -40,14 +54,63 @@ function Profile() {
     department: "Engineering",
     designation: "Software Developer",
     joiningDate: "01 Jan 2026",
+=======
 
-    basicSalary: 30000,
-    allowances: 5000,
-    deductions: 2000,
+  // ==========================================
+  // AUTHENTICATION
+  // ==========================================
+
+  const { currentUser } = useAuth();
+
+
+  // ==========================================
+  // EDIT MODE
+  // ==========================================
+
+  const [isEditing, setIsEditing] =
+    useState(false);
+
+
+  // ==========================================
+  // LOADING
+  // ==========================================
+
+  const [loading, setLoading] =
+    useState(true);
+
+
+  // ==========================================
+  // SAVING
+  // ==========================================
+
+  const [saving, setSaving] =
+    useState(false);
+
+
+  // ==========================================
+  // EMPLOYEE DATA
+  // ==========================================
+
+  const [employee, setEmployee] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+
+    employeeId: "",
+    department: "",
+    designation: "",
+    joiningDate: "",
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
+
+    basicSalary: 0,
+    allowances: 0,
+    deductions: 0,
 
     profileImage: "",
   });
 
+<<<<<<< HEAD
   useEffect(() => {
     const fetchEmployee = async () => {
       if (!currentUser) {
@@ -95,10 +158,161 @@ function Profile() {
         setError("Unable to load employee profile.");
       } finally {
         setLoading(false);
+=======
+
+  // ==========================================
+  // ERROR
+  // ==========================================
+
+  const [error, setError] =
+    useState("");
+
+
+  // ==========================================
+  // FETCH EMPLOYEE PROFILE
+  // ==========================================
+
+  useEffect(() => {
+
+    const fetchEmployee = async () => {
+
+      if (!currentUser) {
+
+        setLoading(false);
+
+        return;
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
       }
+
+
+      try {
+
+        setLoading(true);
+        setError("");
+
+
+        // ======================================
+        // STEP 1:
+        // Get logged-in user's document
+        // ======================================
+
+        const userRef = doc(
+          db,
+          "users",
+          currentUser.uid
+        );
+
+        const userSnap =
+          await getDoc(userRef);
+
+
+        if (!userSnap.exists()) {
+
+          setError(
+            "User account information not found."
+          );
+
+          setLoading(false);
+
+          return;
+        }
+
+
+        const userData =
+          userSnap.data();
+
+
+        // ======================================
+        // STEP 2:
+        // Get Employee ID
+        // ======================================
+
+        const employeeId =
+          userData.employeeId;
+
+
+        if (!employeeId) {
+
+          setError(
+            "Employee ID is missing from your account."
+          );
+
+          setLoading(false);
+
+          return;
+        }
+
+
+        // ======================================
+        // STEP 3:
+        // Get actual employee document
+        // ======================================
+
+        const employeeRef = doc(
+          db,
+          "employees",
+          employeeId
+        );
+
+        const employeeSnap =
+          await getDoc(employeeRef);
+
+
+        if (!employeeSnap.exists()) {
+
+          setError(
+            "Employee profile not found."
+          );
+
+          setLoading(false);
+
+          return;
+        }
+
+
+        // ======================================
+        // STEP 4:
+        // Store employee data
+        // ======================================
+
+        setEmployee({
+          ...employeeSnap.data(),
+
+          // Make sure email is available
+          email:
+            employeeSnap.data().email ||
+            userData.email ||
+            currentUser.email ||
+            "",
+
+          employeeId:
+            employeeSnap.data().employeeId ||
+            employeeId,
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Error loading profile:",
+          error
+        );
+
+        setError(
+          "Unable to load employee profile."
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
     };
 
+
     fetchEmployee();
+<<<<<<< HEAD
   }, [currentUser]);
 
   const formatDate = (value) => {
@@ -113,14 +327,32 @@ function Profile() {
       year: "numeric",
     });
   };
+=======
+
+  }, [currentUser]);
+
+
+  // ==========================================
+  // HANDLE INPUT CHANGE
+  // ==========================================
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
 
   const handleChange = (e) => {
-    setEmployee({
-      ...employee,
-      [e.target.name]: e.target.value,
-    });
+
+    const {
+      name,
+      value,
+    } = e.target;
+
+
+    setEmployee((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
   };
 
+<<<<<<< HEAD
   const openImagePicker = () => fileInputRef.current?.click();
 
   const handleImageUpload = (e) => {
@@ -227,9 +459,134 @@ function Profile() {
     } catch (error) {
       console.error("Error saving profile:", error);
       alert("Failed to update profile");
+=======
+
+  // ==========================================
+  // SAVE PROFILE
+  // ==========================================
+
+  const handleSave = async () => {
+
+    if (!currentUser) {
+
+      alert(
+        "You are not logged in."
+      );
+
+      return;
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
     }
+
+
+    if (!employee.employeeId) {
+
+      alert(
+        "Employee ID not found."
+      );
+
+      return;
+    }
+
+
+    if (!employee.name.trim()) {
+
+      alert(
+        "Please enter your name."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      setSaving(true);
+
+
+      // ======================================
+      // Employee document reference
+      // ======================================
+
+      const employeeRef = doc(
+        db,
+        "employees",
+        employee.employeeId
+      );
+
+
+      // ======================================
+      // Save only editable profile data
+      // ======================================
+
+      await setDoc(
+        employeeRef,
+        {
+          name:
+            employee.name.trim(),
+
+          phone:
+            employee.phone || "",
+
+          address:
+            employee.address || "",
+
+          profileImage:
+            employee.profileImage || "",
+
+          // Keep employee ID linked
+          employeeId:
+            employee.employeeId,
+
+          // Keep email synced
+          email:
+            employee.email ||
+            currentUser.email ||
+            "",
+        },
+        {
+          merge: true,
+        }
+      );
+
+
+      // ======================================
+      // Update local state
+      // ======================================
+
+      setEmployee((previous) => ({
+        ...previous,
+        name: employee.name.trim(),
+      }));
+
+
+      alert(
+        "Profile updated successfully!"
+      );
+
+
+      setIsEditing(false);
+
+
+    } catch (error) {
+
+      console.error(
+        "Error saving profile:",
+        error
+      );
+
+      alert(
+        "Failed to update profile."
+      );
+
+    } finally {
+
+      setSaving(false);
+
+    }
+
   };
 
+<<<<<<< HEAD
   if (loading) {
     return <div className="profile-container"><h2>Loading profile...</h2></div>;
   }
@@ -242,12 +599,80 @@ function Profile() {
       </div>
     );
   }
+=======
+
+  // ==========================================
+  // NET SALARY
+  // ==========================================
+
+  const netSalary =
+    Number(employee.basicSalary || 0) +
+    Number(employee.allowances || 0) -
+    Number(employee.deductions || 0);
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
+
+
+  // ==========================================
+  // LOADING SCREEN
+  // ==========================================
+
+  if (loading) {
+
+    return (
+
+      <div className="profile-container">
+
+        <h2>
+          Loading profile...
+        </h2>
+
+      </div>
+
+    );
+
+  }
+
+
+  // ==========================================
+  // ERROR SCREEN
+  // ==========================================
+
+  if (error) {
+
+    return (
+
+      <div className="profile-container">
+
+        <h2>
+          Employee Profile
+        </h2>
+
+        <p className="error-message">
+          {error}
+        </p>
+
+      </div>
+
+    );
+
+  }
+
+
+  // ==========================================
+  // PROFILE PAGE
+  // ==========================================
 
   return (
+
     <div className="profile-container">
 
-      {/* Profile Header */}
+
+      {/* ======================================
+          PROFILE HEADER
+      ======================================= */}
+
       <div className="profile-header">
+<<<<<<< HEAD
         <div className="profile-avatar-wrapper">
           <div className="profile-avatar">
             {employee.profileImage ? (
@@ -286,56 +711,206 @@ function Profile() {
                 onChange={handleImageUpload}
               />
             </>
+=======
+
+
+        {/* Profile Avatar */}
+
+        <div className="profile-avatar">
+
+          {employee.profileImage ? (
+
+            <img
+              src={employee.profileImage}
+              alt="Profile"
+              className="profile-image"
+            />
+
+          ) : (
+
+            employee.name
+              ?.trim()
+              ?.charAt(0)
+              ?.toUpperCase() || "E"
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
           )}
+
         </div>
 
+<<<<<<< HEAD
         <div className="profile-info">
           <h1 className="profile-name">{employee.name || "Employee"}</h1>
           <p>{employee.designation || "Employee"}</p>
           <span>{employee.department || "Department"}</span>
+=======
+
+        {/* Employee Name */}
+
+        <div>
+
+          <h1>
+            {employee.name ||
+              "Employee Name"}
+          </h1>
+
+          <p>
+            {employee.designation ||
+              "Employee"}
+          </p>
+
+          <span>
+            {employee.department ||
+              "Department"}
+          </span>
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
         </div>
 
+
+        {/* Edit Button */}
+
         <button
+          type="button"
           className="edit-profile-btn"
-          onClick={() => setIsEditing(!isEditing)}
+          onClick={() => {
+
+            setIsEditing(
+              !isEditing
+            );
+
+          }}
         >
+
           <Pencil size={18} />
-          {isEditing ? "Cancel" : "Edit Profile"}
+
+          {isEditing
+            ? "Cancel"
+            : "Edit Profile"}
+
         </button>
+
       </div>
+
+
+      {/* ======================================
+          PROFILE GRID
+      ======================================= */}
 
       <div className="profile-grid">
 
-        {/* Personal Details */}
+
+        {/* ====================================
+            PERSONAL DETAILS
+        ===================================== */}
+
         <div className="profile-card">
-          <h2>Personal Details</h2>
+
+          <h2>
+            Personal Details
+          </h2>
+
+
+          {/* Name */}
 
           <div className="profile-field">
-            <Mail size={20} />
-            <div>
-              <label>Email</label>
-              <p>{employee.email}</p>
-            </div>
-          </div>
 
-          <div className="profile-field">
-            <Phone size={20} />
+            <User size={20} />
+
             <div>
-              <label>Phone</label>
+
+              <label>
+                Full Name
+              </label>
+
 
               {isEditing ? (
+
                 <input
+                  type="text"
+                  name="name"
+                  value={employee.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                />
+
+              ) : (
+
+                <p>
+                  {employee.name ||
+                    "Not provided"}
+                </p>
+
+              )}
+
+            </div>
+
+          </div>
+
+
+          {/* Email */}
+
+          <div className="profile-field">
+
+            <Mail size={20} />
+
+            <div>
+
+              <label>
+                Email
+              </label>
+
+              <p>
+                {employee.email ||
+                  "Not provided"}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* Phone */}
+
+          <div className="profile-field">
+
+            <Phone size={20} />
+
+            <div>
+
+              <label>
+                Phone
+              </label>
+
+
+              {isEditing ? (
+
+                <input
+                  type="text"
                   name="phone"
                   value={employee.phone}
                   onChange={handleChange}
+                  placeholder="Enter phone number"
                 />
+
               ) : (
-                <p>{employee.phone}</p>
+
+                <p>
+                  {employee.phone ||
+                    "Not provided"}
+                </p>
+
               )}
+
             </div>
+
           </div>
 
+
+          {/* Address */}
+
           <div className="profile-field">
+<<<<<<< HEAD
             <Calendar size={20} />
             <div>
               <label>Date of Birth</label>
@@ -354,71 +929,183 @@ function Profile() {
           </div>
 
           <div className="profile-field">
+=======
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
             <MapPin size={20} />
+
             <div>
-              <label>Address</label>
+
+              <label>
+                Address
+              </label>
+
 
               {isEditing ? (
+
                 <input
+                  type="text"
                   name="address"
                   value={employee.address}
                   onChange={handleChange}
+                  placeholder="Enter address"
                 />
+
               ) : (
-                <p>{employee.address}</p>
+
+                <p>
+                  {employee.address ||
+                    "Not provided"}
+                </p>
+
               )}
+
             </div>
+
           </div>
+
+
+          {/* Profile Image */}
 
           {isEditing && (
+
             <div className="profile-field">
+
               <CreditCard size={20} />
+
               <div>
+<<<<<<< HEAD
                 <label>Profile Image</label>
                 <p className="profile-upload-note">Use the camera icon above to choose and crop a profile picture.</p>
+=======
+
+                <label>
+                  Profile Image URL
+                </label>
+
+                <input
+                  type="text"
+                  name="profileImage"
+                  value={
+                    employee.profileImage
+                  }
+                  onChange={handleChange}
+                  placeholder="Paste image URL"
+                />
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
               </div>
+
             </div>
+
           )}
+
         </div>
 
-        {/* Job Details */}
+
+        {/* ====================================
+            JOB DETAILS
+        ===================================== */}
+
         <div className="profile-card">
-          <h2>Job Details</h2>
+
+          <h2>
+            Job Details
+          </h2>
+
+
+          {/* Employee ID */}
 
           <div className="profile-field">
+
             <CreditCard size={20} />
+
             <div>
-              <label>Employee ID</label>
-              <p>{employee.employeeId}</p>
+
+              <label>
+                Employee ID
+              </label>
+
+              <p>
+                {employee.employeeId ||
+                  "Not provided"}
+              </p>
+
             </div>
+
           </div>
 
+
+          {/* Department */}
+
           <div className="profile-field">
+
             <Building2 size={20} />
+
             <div>
-              <label>Department</label>
-              <p>{employee.department}</p>
+
+              <label>
+                Department
+              </label>
+
+              <p>
+                {employee.department ||
+                  "Not provided"}
+              </p>
+
             </div>
+
           </div>
 
+
+          {/* Designation */}
+
           <div className="profile-field">
+
             <Briefcase size={20} />
+
             <div>
-              <label>Designation</label>
-              <p>{employee.designation}</p>
+
+              <label>
+                Designation
+              </label>
+
+              <p>
+                {employee.designation ||
+                  "Not provided"}
+              </p>
+
             </div>
+
           </div>
 
+
+          {/* Joining Date */}
+
           <div className="profile-field">
+
             <Calendar size={20} />
+
             <div>
-              <label>Joining Date</label>
-              <p>{employee.joiningDate}</p>
+
+              <label>
+                Joining Date
+              </label>
+
+              <p>
+                {employee.joiningDate ||
+                  "Not provided"}
+              </p>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
 
+<<<<<<< HEAD
       {cropModalOpen && (
         <div className="crop-modal-backdrop">
           <div className="crop-modal">
@@ -475,17 +1162,123 @@ function Profile() {
                 Apply Crop
               </button>
             </div>
-          </div>
+=======
+
+      {/* ======================================
+          SALARY STRUCTURE
+      ======================================= */}
+
+      <div className="salary-card">
+
+        <div className="salary-title">
+
+          <Wallet size={24} />
+
+          <h2>
+            Salary Structure
+          </h2>
+
         </div>
+
+
+        <div className="salary-grid">
+
+
+          {/* Basic Salary */}
+
+          <div className="salary-item">
+
+            <span>
+              Basic Salary
+            </span>
+
+            <strong>
+              ₹{employee.basicSalary || 0}
+            </strong>
+
+          </div>
+
+
+          {/* Allowances */}
+
+          <div className="salary-item">
+
+            <span>
+              Allowances
+            </span>
+
+            <strong>
+              ₹{employee.allowances || 0}
+            </strong>
+
+          </div>
+
+
+          {/* Deductions */}
+
+          <div className="salary-item">
+
+            <span>
+              Deductions
+            </span>
+
+            <strong>
+              ₹{employee.deductions || 0}
+            </strong>
+
+          </div>
+
+
+          {/* Net Salary */}
+
+          <div className="salary-item net-salary">
+
+            <span>
+              Net Salary
+            </span>
+
+            <strong>
+              ₹{netSalary}
+            </strong>
+
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
+          </div>
+
+        </div>
+<<<<<<< HEAD
       )}
+=======
+
+      </div>
+>>>>>>> 77c86d7cde5cb46bddcc0421e49e068037ff150b
+
+
+      {/* ======================================
+          SAVE BUTTON
+      ======================================= */}
 
       {isEditing && (
-        <button className="save-profile-btn" onClick={handleSave}>
-          Save Changes
+
+        <button
+          type="button"
+          className="save-profile-btn"
+          onClick={handleSave}
+          disabled={saving}
+        >
+
+          {saving
+            ? "Saving..."
+            : "Save Changes"}
+
         </button>
+
       )}
+
     </div>
+
   );
+
 }
+
 
 export default Profile;
