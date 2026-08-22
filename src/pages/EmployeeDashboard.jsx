@@ -89,6 +89,10 @@ function EmployeeDashboard() {
 
       try {
 
+        setLoading(true);
+        setError("");
+
+
         // ==========================================
         // STEP 1:
         // Get logged-in user's document
@@ -117,7 +121,9 @@ function EmployeeDashboard() {
         }
 
 
-        const userData = userSnap.data();
+        const userData =
+          userSnap.data();
+
 
         const employeeId =
           userData.employeeId;
@@ -171,8 +177,12 @@ function EmployeeDashboard() {
         // Store employee data
         // ==========================================
 
+        const employeeData =
+          employeeSnap.data();
+
+
         setEmployee(
-          employeeSnap.data()
+          employeeData
         );
 
       } catch (error) {
@@ -206,6 +216,7 @@ function EmployeeDashboard() {
   if (loading) {
 
     return (
+
       <div className="dashboard-container">
 
         <h2>
@@ -213,6 +224,7 @@ function EmployeeDashboard() {
         </h2>
 
       </div>
+
     );
 
   }
@@ -225,6 +237,7 @@ function EmployeeDashboard() {
   if (error) {
 
     return (
+
       <div className="dashboard-container">
 
         <h2>
@@ -244,9 +257,29 @@ function EmployeeDashboard() {
         </button>
 
       </div>
+
     );
 
   }
+
+
+  // ==========================================
+  // EMPLOYEE NAME
+  // ==========================================
+
+  const employeeName =
+    employee?.name?.trim() ||
+    "Employee";
+
+
+  const designation =
+    employee?.designation?.trim() ||
+    "Employee";
+
+
+  const department =
+    employee?.department?.trim() ||
+    "Department";
 
 
   // ==========================================
@@ -266,18 +299,13 @@ function EmployeeDashboard() {
         <div>
 
           <h1>
-            Welcome back,{" "}
-            {employee?.name || "Employee"} 👋
+            Welcome back, {employeeName} 👋
           </h1>
 
           <p>
-            {employee?.designation ||
-              "Employee"}
-
+            {designation}
             {" • "}
-
-            {employee?.department ||
-              "Department"}
+            {department}
           </p>
 
         </div>
@@ -423,6 +451,7 @@ function EmployeeDashboard() {
     </div>
 
   );
+
 }
 
 
