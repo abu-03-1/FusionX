@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import {
   collection,
   doc,
@@ -71,11 +71,7 @@ function Attendance() {
 
   const today = getToday();
 
-  useEffect(() => {
-    loadAttendance();
-  }, []);
-
-  async function loadAttendance() {
+  const loadAttendance = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -145,7 +141,15 @@ function Attendance() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [today]);
+
+  useEffect(() => {
+    const run = async () => {
+      await loadAttendance();
+    };
+
+    run();
+  }, [loadAttendance]);
 
   async function handleCheckIn() {
     if (!user) {

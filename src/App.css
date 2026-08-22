@@ -336,8 +336,6 @@
   color: white;
   cursor: pointer;
 }
-<<<<<<< HEAD
-
 
 /* =========================
    ATTENDANCE MODULE
@@ -633,7 +631,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-=======
+
 @media (max-width: 900px) {
   .quick-actions {
     grid-template-columns: repeat(2, 1fr);
@@ -750,4 +748,4 @@
     margin-left: 0;
   }
 }
->>>>>>> c9763bc7acbc69151f398949e495a0b897e9ba2f
+
