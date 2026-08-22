@@ -47,10 +47,20 @@ function App() {
 
 
         {/* =========================
-            EMPLOYEE ROUTES
+            EMPLOYEE DASHBOARD
         ========================== */}
 
-        {/* Employee Dashboard */}
+        {/* Existing team route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["employee"]}>
+              <EmployeeDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Authentication route */}
         <Route
           path="/employee-dashboard"
           element={
@@ -62,10 +72,9 @@ function App() {
 
 
         {/* =========================
-            ADMIN / HR ROUTES
+            ADMIN / HR DASHBOARD
         ========================== */}
 
-        {/* Admin / HR Dashboard */}
         <Route
           path="/admin-dashboard"
           element={
