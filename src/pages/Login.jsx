@@ -91,7 +91,7 @@ function Login() {
       <section className="login__panel">
         <div className="login__brand">
           <span className="employee-brand__mark">D</span>
-          <span><strong>Dayflow</strong><small>HR MANAGEMENT</small></span>
+          <span><strong>RotaX</strong><small>HR MANAGEMENT</small></span>
         </div>
         <div className="login__quote">
           <h2>One clear view of the workday.</h2>
@@ -103,7 +103,7 @@ function Login() {
       <section className="login__form-col">
         <div className="login__form">
           <span className="content__eyebrow">Welcome back</span>
-          <h1>Sign in to Dayflow</h1>
+          <h1>Sign in to RotaX</h1>
           <p className="login__form-sub">Use your work account to continue.</p>
           <div className="login-type" role="tablist" aria-label="Account type">
             <button type="button" className={loginType === "employee" ? "active" : ""} onClick={() => handleLoginTypeChange("employee")}>Employee</button>

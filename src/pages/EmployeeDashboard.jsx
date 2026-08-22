@@ -433,7 +433,7 @@ function EmployeeDashboard() {
             Welcome to{" "}
 
             <strong>
-              Dayflow HRMS
+              RotaX HRMS
             </strong>
 
           </p>

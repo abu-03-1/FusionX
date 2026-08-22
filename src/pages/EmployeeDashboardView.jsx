@@ -78,11 +78,11 @@ function EmployeeDashboardView() {
   };
 
   if (loading) return <div className="employee-loading"><div className="skeleton employee-loading__bar" /><p>Loading your workspace...</p></div>;
-  if (error) return <div className="employee-loading"><h2>Dayflow</h2><p>{error}</p></div>;
+  if (error) return <div className="employee-loading"><h2>RotaX</h2><p>{error}</p></div>;
 
   return <div className="employee-shell">
     <aside className="employee-sidebar">
-      <Link to="/employee-dashboard" className="employee-brand"><span className="employee-brand__mark">D</span><span><strong>Dayflow</strong><small>HR MANAGEMENT</small></span></Link>
+      <Link to="/employee-dashboard" className="employee-brand"><span className="employee-brand__mark">R</span><span><strong>RotaX</strong><small>HR MANAGEMENT</small></span></Link>
       <nav className="employee-nav"><span className="employee-nav__label">MENU</span>{navigation.map(([label, path, Icon]) => <Link key={label} to={path} className={label === "Overview" ? "employee-nav__item is-active" : "employee-nav__item"}><Icon className="employee-nav__icon" size={16} />{label}</Link>)}</nav>
       <div className="employee-sidebar__footer"><div className="employee-user-chip"><span className="employee-avatar">{getInitials(employee?.name)}</span><span><strong>{employee?.name || "Employee"}</strong><small>{employee?.designation || "Team member"}</small></span></div><button className="employee-logout" onClick={handleLogout}><LogOut size={16} />Log out</button></div>
     </aside>

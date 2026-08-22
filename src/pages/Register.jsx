@@ -83,7 +83,7 @@ function Register() {
   return (
     <div className="login">
       <section className="login__panel">
-        <div className="login__brand"><span className="employee-brand__mark">D</span><span><strong>Dayflow</strong><small>HR MANAGEMENT</small></span></div>
+        <div className="login__brand"><span className="employee-brand__mark">R</span><span><strong>RotaX</strong><small>HR MANAGEMENT</small></span></div>
         <div className="login__quote"><h2>Start your workday in one place.</h2><p>Create your employee account to access attendance, leave, and payroll.</p><div className="login__arc-wrap"><div className="login-arc-line" /><span className="login-arc-dot" /></div></div>
         <p className="login__quote-note">Human Resource Management System</p>
       </section>

@@ -220,7 +220,7 @@ td { color: #4d586c; }
   .payroll-form { grid-template-columns: 1fr; }
 }
 
-/* Dayflow design-system mapping for the HR workspace. */
+/* RotaX design-system mapping for the HR workspace. */
 .hr-layout { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); }
 .hr-sidebar { background: var(--color-primary); }
 .brand-logo { background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark)); }

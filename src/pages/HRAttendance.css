@@ -374,7 +374,7 @@
   }
 }
 
-/* Dayflow design-system mapping for the standalone HR attendance view. */
+/* RotaX design-system mapping for the standalone HR attendance view. */
 .hr-attendance-page { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); }
 .hr-attendance-header h1, .selected-employee-card h2, .hr-section-header h2 { font-family: var(--font-display); color: var(--color-ink); }
 .hr-label { color: var(--color-accent-dark); }

@@ -201,7 +201,7 @@ function HRAttendance() {
       {/* Header */}
       <div className="hr-attendance-header">
         <div>
-          <span className="hr-label">DAYFLOW HRMS</span>
+          <span className="hr-label">ROTAX HRMS</span>
 
           <h1>Attendance Management</h1>
 

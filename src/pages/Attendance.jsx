@@ -308,7 +308,7 @@ function Attendance() {
       </button>
       <div className="attendance-header">
         <div>
-          <p className="attendance-label">DAYFLOW HRMS</p>
+          <p className="attendance-label">ROTAX HRMS</p>
           <h1>Attendance Management</h1>
           <p className="attendance-subtitle">
             Track your daily check-in, check-out and attendance history.
