@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import {
+  User,
   Mail,
   Phone,
   MapPin,
@@ -8,9 +9,8 @@ import {
   Briefcase,
   Calendar,
   CreditCard,
-  Camera,
+  Wallet,
   Pencil,
-  X,
 } from "lucide-react";
 
 import {
@@ -20,8 +20,6 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../firebase/config";
-import { useAuth } from "../context/AuthContext";
-
 import { useAuth } from "../context/AuthContext";
 
 
@@ -98,12 +96,9 @@ function Profile() {
     const fetchEmployee = async () => {
 
       if (!currentUser) {
-
         setLoading(false);
-
         return;
       }
-
 
       try {
 
@@ -133,7 +128,6 @@ function Profile() {
           );
 
           setLoading(false);
-
           return;
         }
 
@@ -158,7 +152,6 @@ function Profile() {
           );
 
           setLoading(false);
-
           return;
         }
 
@@ -185,7 +178,6 @@ function Profile() {
           );
 
           setLoading(false);
-
           return;
         }
 
@@ -195,21 +187,23 @@ function Profile() {
         // Store employee data
         // ======================================
 
-        setEmployee({
-          ...employeeSnap.data(),
+        const employeeData =
+          employeeSnap.data();
 
-          // Make sure email is available
+
+        setEmployee({
+          ...employeeData,
+
           email:
-            employeeSnap.data().email ||
+            employeeData.email ||
             userData.email ||
             currentUser.email ||
             "",
 
           employeeId:
-            employeeSnap.data().employeeId ||
+            employeeData.employeeId ||
             employeeId,
         });
-
 
       } catch (error) {
 
@@ -227,7 +221,6 @@ function Profile() {
         setLoading(false);
 
       }
-
     };
 
 
@@ -264,30 +257,21 @@ function Profile() {
 
     if (!currentUser) {
 
-      alert(
-        "You are not logged in."
-      );
-
+      alert("You are not logged in.");
       return;
     }
 
 
     if (!employee.employeeId) {
 
-      alert(
-        "Employee ID not found."
-      );
-
+      alert("Employee ID not found.");
       return;
     }
 
 
     if (!employee.name.trim()) {
 
-      alert(
-        "Please enter your name."
-      );
-
+      alert("Please enter your name.");
       return;
     }
 
@@ -309,7 +293,7 @@ function Profile() {
 
 
       // ======================================
-      // Save only editable profile data
+      // Save profile changes
       // ======================================
 
       await setDoc(
@@ -327,11 +311,9 @@ function Profile() {
           profileImage:
             employee.profileImage || "",
 
-          // Keep employee ID linked
           employeeId:
             employee.employeeId,
 
-          // Keep email synced
           email:
             employee.email ||
             currentUser.email ||
@@ -359,7 +341,6 @@ function Profile() {
 
 
       setIsEditing(false);
-
 
     } catch (error) {
 
@@ -398,15 +379,9 @@ function Profile() {
   if (loading) {
 
     return (
-
       <div className="profile-container">
-
-        <h2>
-          Loading profile...
-        </h2>
-
+        <h2>Loading profile...</h2>
       </div>
-
     );
 
   }
@@ -419,7 +394,6 @@ function Profile() {
   if (error) {
 
     return (
-
       <div className="profile-container">
 
         <h2>
@@ -431,7 +405,6 @@ function Profile() {
         </p>
 
       </div>
-
     );
 
   }
@@ -451,7 +424,6 @@ function Profile() {
       ======================================= */}
 
       <div className="profile-header">
-
 
         {/* Profile Avatar */}
 
@@ -504,13 +476,9 @@ function Profile() {
         <button
           type="button"
           className="edit-profile-btn"
-          onClick={() => {
-
-            setIsEditing(
-              !isEditing
-            );
-
-          }}
+          onClick={() =>
+            setIsEditing(!isEditing)
+          }
         >
 
           <Pencil size={18} />
@@ -542,7 +510,7 @@ function Profile() {
           </h2>
 
 
-          {/* Name */}
+          {/* Full Name */}
 
           <div className="profile-field">
 
@@ -553,7 +521,6 @@ function Profile() {
               <label>
                 Full Name
               </label>
-
 
               {isEditing ? (
 
@@ -613,7 +580,6 @@ function Profile() {
                 Phone
               </label>
 
-
               {isEditing ? (
 
                 <input
@@ -641,6 +607,7 @@ function Profile() {
           {/* Address */}
 
           <div className="profile-field">
+
             <MapPin size={20} />
 
             <div>
@@ -648,7 +615,6 @@ function Profile() {
               <label>
                 Address
               </label>
-
 
               {isEditing ? (
 
@@ -674,7 +640,7 @@ function Profile() {
           </div>
 
 
-          {/* Profile Image */}
+          {/* Profile Image URL */}
 
           {isEditing && (
 
