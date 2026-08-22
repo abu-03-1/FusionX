@@ -9,8 +9,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import HRAttendance from "./pages/HRAttendance";
-
-
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -25,38 +23,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* =========================
-            PUBLIC ROUTES
-        ========================== */}
-
-        {/* Default Route */}
+        {/* Public routes */}
         <Route
           path="/"
           element={<Navigate to="/login" replace />}
         />
-
-        {/* Login */}
         <Route
           path="/login"
           element={<Login />}
         />
-
-
-        <Route path="/hr-attendance" element={<HRAttendance />} />
-
-        {/* Employee Registration Only */}
         <Route
           path="/register"
           element={<Register />}
         />
 
-
-        {/* =========================
-            EMPLOYEE DASHBOARD
-        ========================== */}
-
-        {/* Existing team route */}
+        {/* Employee routes */}
         <Route
           path="/dashboard"
           element={
@@ -65,8 +46,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Authentication route */}
         <Route
           path="/employee-dashboard"
           element={
@@ -76,11 +55,7 @@ function App() {
           }
         />
 
-
-        {/* =========================
-            ADMIN / HR DASHBOARD
-        ========================== */}
-
+        {/* Admin and HR routes */}
         <Route
           path="/admin-dashboard"
           element={
@@ -89,13 +64,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/hr-attendance"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "hr"]}>
+              <HRAttendance />
+            </ProtectedRoute>
+          }
+        />
 
-
-        {/* =========================
-            AUTHENTICATED USER ROUTES
-        ========================== */}
-
-        {/* Profile */}
+        {/* Authenticated user routes */}
         <Route
           path="/profile"
           element={
@@ -104,8 +82,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Attendance */}
         <Route
           path="/attendance"
           element={
@@ -114,8 +90,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Leave */}
         <Route
           path="/leave"
           element={
@@ -124,8 +98,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Payroll */}
         <Route
           path="/payroll"
           element={
@@ -135,16 +107,11 @@ function App() {
           }
         />
 
-
-        {/* =========================
-            UNKNOWN ROUTES
-        ========================== */}
-
+        {/* Unknown routes */}
         <Route
           path="*"
           element={<Navigate to="/login" replace />}
         />
-
       </Routes>
     </BrowserRouter>
   );
