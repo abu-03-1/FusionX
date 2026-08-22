@@ -5,6 +5,7 @@ import "./index.css";
 import "./App.css";
 
 import App from "./App.jsx";
+import { AuthProvider } from "./context/AuthContext";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
 
