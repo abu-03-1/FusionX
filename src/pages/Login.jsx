@@ -53,15 +53,36 @@ function Login() {
     setLoading(false);
 
     if (!result.success) {
-      setError("Invalid email or password.");
+      setError(result.error || "Invalid email or password.");
       return;
     }
 
-    // Temporary dashboard routing
-    if (loginType === "employee") {
+    // Check the actual role stored in Firestore
+    if (result.role === "employee") {
+      // Employee account
+      if (loginType !== "employee") {
+        setError("This account is not an Admin / HR account.");
+        return;
+      }
+
       navigate("/employee-dashboard");
-    } else {
+    } 
+    
+    else if (
+      result.role === "admin" ||
+      result.role === "hr"
+    ) {
+      // Admin / HR account
+      if (loginType !== "admin") {
+        setError("This account is not an Employee account.");
+        return;
+      }
+
       navigate("/admin-dashboard");
+    } 
+    
+    else {
+      setError("Invalid user role. Please contact HR/Admin.");
     }
   };
 
@@ -70,12 +91,14 @@ function Login() {
       <div className="login-card">
 
         <h1>Dayflow</h1>
+
         <p>Human Resource Management System</p>
 
         <h2>Login</h2>
 
         {/* Login Type */}
         <div className="login-type">
+
           <button
             type="button"
             className={
@@ -99,10 +122,12 @@ function Login() {
           >
             Admin / HR
           </button>
+
         </div>
 
         <form onSubmit={handleSubmit}>
 
+          {/* Email */}
           <div>
             <label>Email</label>
 
@@ -112,9 +137,11 @@ function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              required
             />
           </div>
 
+          {/* Password */}
           <div>
             <label>Password</label>
 
@@ -124,15 +151,18 @@ function Login() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              required
             />
           </div>
 
+          {/* Error */}
           {error && (
             <p className="error-message">
               {error}
             </p>
           )}
 
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}

@@ -4,21 +4,45 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { auth } from "../firebase/config";
+import {
+  doc,
+  setDoc,
+  getDoc,
+} from "firebase/firestore";
 
-// Register user
-export const registerUser = async (email, password) => {
+import { auth, db } from "../firebase/config";
+
+// Register Employee
+export const registerUser = async (
+  employeeId,
+  email,
+  password
+) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    // Create Firebase Authentication account
+    const userCredential =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    const user = userCredential.user;
+
+    // Save employee information in Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      employeeId: employeeId,
+      email: email,
+      role: "employee",
+      createdAt: new Date(),
+    });
 
     return {
       success: true,
-      user: userCredential.user,
+      user: user,
     };
+
   } catch (error) {
     return {
       success: false,
@@ -27,19 +51,44 @@ export const registerUser = async (email, password) => {
   }
 };
 
-// Login user
-export const loginUser = async (email, password) => {
+
+// Login User
+export const loginUser = async (
+  email,
+  password
+) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
+    const userCredential =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    const user = userCredential.user;
+
+    // Get user role from Firestore
+    const userDoc = await getDoc(
+      doc(db, "users", user.uid)
     );
+
+    if (!userDoc.exists()) {
+      await signOut(auth);
+
+      return {
+        success: false,
+        error: "User profile not found.",
+      };
+    }
+
+    const userData = userDoc.data();
 
     return {
       success: true,
-      user: userCredential.user,
+      user: user,
+      role: userData.role,
     };
+
   } catch (error) {
     return {
       success: false,
@@ -48,7 +97,8 @@ export const loginUser = async (email, password) => {
   }
 };
 
-// Logout user
+
+// Logout User
 export const logoutUser = async () => {
   try {
     await signOut(auth);
@@ -56,6 +106,7 @@ export const logoutUser = async () => {
     return {
       success: true,
     };
+
   } catch (error) {
     return {
       success: false,
